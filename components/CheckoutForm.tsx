@@ -6,9 +6,10 @@ import { createClient } from "@/lib/supabaseClient";
 interface CheckoutProps {
   onComplete: () => void;
   totalCents: number;
+  cartItems: Perfume[];  // ← AÑADE ESTA LÍNEA
 }
 
-export default function CheckoutForm({ onComplete, totalCents }: CheckoutProps) {
+export default function CheckoutForm({ onComplete, totalCents, cartItems }: CheckoutProps) {
   const [step, setStep] = useState(1);
   const [loading, setLoading] = useState(false);
   const [copied, setCopied] = useState(false);
@@ -21,21 +22,82 @@ export default function CheckoutForm({ onComplete, totalCents }: CheckoutProps) 
     setTimeout(() => setCopied(false), 2000);
   };
 
-  const handleFinalize = async () => {
-    setLoading(true);
-    try {
-      const supabase = createClient();
-      await supabase.from("orders").insert([{
-        customer_name: formData.nombre, whatsapp: formData.whatsapp,
-        city: formData.ciudad, address: formData.direccion,
-        total_cents: totalCents, status: 'esperando_pago'
-      }]);
-      // Enlace de WhatsApp para comprobante
-      const mensaje = `Hola Aura Reborn, orden confirmada:\n👤 ${formData.nombre}\n📍 ${formData.ciudad}\n💰 $${totalDollars}\n\nEnvío vía: Servientrega/Tramaco.`;
-      window.open(`https://wa.me/593900000000?text=${encodeURIComponent(mensaje)}`, "_blank");
-      onComplete();
-    } catch (e) { onComplete(); } finally { setLoading(false); }
-  };
+const handleFinalize = async () => {
+  setLoading(true);
+  try {
+    const supabase = createClient();
+    const { data: { user } } = await supabase.auth.getUser();
+    
+    if (!user) {
+      alert("Debes iniciar sesión para completar la compra");
+      setLoading(false);
+      return;
+    }
+
+    // PASO 1: Crear la orden
+    const { data: orderData, error: orderError } = await supabase
+      .from("orders")
+      .insert([{
+        user_id: user.id,
+        customer_name: formData.nombre,
+        whatsapp: formData.whatsapp,
+        city: formData.ciudad,
+        address: formData.direccion,
+        total_cents: totalCents,
+        status: 'esperando_pago',
+        courier: 'Servientrega',
+        estimated_delivery: new Date(Date.now() + 3 * 24 * 60 * 60 * 1000).toISOString().split('T')[0]
+      }])
+      .select()
+      .single();
+
+    if (orderError) throw orderError;
+
+    // PASO 2: Guardar los items de la orden
+    // PASO 2: Guardar los items de la orden (AGRUPADOS por perfume)
+// Agrupar items por perfume_id y contar cantidades
+const groupedCart: Record<string, { perfume: any, qty: number }> = {};
+
+cartItems.forEach(item => {
+  if (groupedCart[item.id]) {
+    groupedCart[item.id].qty++;
+  } else {
+    groupedCart[item.id] = { perfume: item, qty: 1 };
+  }
+});
+
+const orderItems = Object.values(groupedCart).map(({ perfume, qty }) => ({
+  order_id: orderData.id,
+  perfume_id: perfume.id,
+  perfume_name: perfume.name,
+  perfume_price_cents: perfume.price_cents,
+  qty: qty
+}));
+
+const { error: itemsError } = await supabase
+  .from("order_items")
+  .insert(orderItems);
+
+if (itemsError) {
+  console.error("Error al guardar items:", itemsError);
+  throw itemsError;
+}
+    // WhatsApp
+    const mensaje = `Hola Aura Reborn, pedido confirmado:\n\n📦 Orden: #${orderData.id.slice(0, 8).toUpperCase()}\n👤 ${formData.nombre}\n📍 ${formData.ciudad}\n💰 Total: $${totalDollars}\n\nProcediendo con el pago.`;
+    window.open(`https://wa.me/593900000000?text=${encodeURIComponent(mensaje)}`, "_blank");
+    
+    // Limpiar formulario
+    setFormData({ nombre: "", whatsapp: "", ciudad: "Quito", direccion: "" });
+    setStep(1);
+    
+    onComplete();
+  } catch (e) {
+    console.error("Error:", e);
+    alert("Hubo un problema. Intenta de nuevo.");
+  } finally {
+    setLoading(false);
+  }
+};
 
   return (
     <div className="space-y-8 p-2">

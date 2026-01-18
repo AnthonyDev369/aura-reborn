@@ -83,3 +83,23 @@ body::after {
   animation: luxury-pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
   border: 1px solid rgba(212, 175, 55, 0.05);
 }
+/* Al final del archivo globals.css, añade: */
+
+/* Scrollbar Premium */
+/* Scrollbar Premium Invisible */
+.custom-scrollbar::-webkit-scrollbar {
+  width: 4px;
+}
+
+.custom-scrollbar::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.custom-scrollbar::-webkit-scrollbar-thumb {
+  background: rgba(212, 175, 55, 0.2);
+  border-radius: 10px;
+}
+
+.custom-scrollbar::-webkit-scrollbar-thumb:hover {
+  background: rgba(212, 175, 55, 0.4);
+}

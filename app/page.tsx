@@ -116,47 +116,66 @@ export default function HomePage() {
       alert(error.message || "Error al añadir al carrito");
     }
   };
-
-    const removeFromCart = async (index: number) => {
-    try {
-      const supabase = createClient();
-      const { data: { user } } = await supabase.auth.getUser();
-      const perfumeToRemove = cartItems[index];
-      
-      if (user && perfumeToRemove) {
-        // Usuario logueado: eliminar de Supabase
-        await removeFromCartDB(perfumeToRemove.id);
-      }
-      
-      // Actualizar estado local
-      const newItems = cartItems.filter((_, i) => i !== index);
-      setCartItems(newItems);
-    } catch (error: any) {
-      alert(error.message || "Error al eliminar del carrito");
+const removeFromCart = async (index: number) => {
+  try {
+    const supabase = createClient();
+    const { data: { user } } = await supabase.auth.getUser();
+    const perfumeToRemove = cartItems[index];
+    
+    if (user && perfumeToRemove) {
+      await removeFromCartDB(perfumeToRemove.id);
     }
-  };
+    
+    const newItems = cartItems.filter((_, i) => i !== index);
+    setCartItems(newItems);
+  } catch (error: any) {
+    alert(error.message || "Error al eliminar del carrito");
+  }
+};
 
+const removeMultipleFromCart = async (indices: number[]) => {
+  try {
+    const supabase = createClient();
+    const { data: { user } } = await supabase.auth.getUser();
+    
+    // Eliminar de Supabase si está logueado
+    if (user) {
+      const perfumesToRemove = indices.map(i => cartItems[i]);
+      const uniquePerfumeIds = [...new Set(perfumesToRemove.map(p => p.id))];
+      
+      for (const perfumeId of uniquePerfumeIds) {
+        await removeFromCartDB(perfumeId);
+      }
+    }
+    
+    // Eliminar TODOS de una vez del estado local
+    const newItems = cartItems.filter((_, i) => !indices.includes(i));
+    setCartItems(newItems);
+  } catch (error: any) {
+    console.error("Error al eliminar:", error);
+  }
+};
     const handlePurchase = async () => {
-    try {
-      const supabase = createClient();
-      const { data: { user } } = await supabase.auth.getUser();
-      
-      if (user) {
-        // Limpiar carrito de Supabase
-        await clearCart();
-      } else {
-        // Limpiar carrito de localStorage
-        localStorage.removeItem("aura-cart");
-      }
-      
-      setIsCartOpen(false);
-      setIsSuccessOpen(true);
-      setCartItems([]);
-    } catch (error) {
-      console.error("Error en compra:", error);
-      setIsSuccessOpen(true);
+  try {
+    const supabase = createClient();
+    const { data: { user } } = await supabase.auth.getUser();
+    
+    if (user) {
+      // Limpiar carrito de Supabase
+      await clearCart();
+    } else {
+      // Limpiar carrito de localStorage
+      localStorage.removeItem("aura-cart");
     }
-  };
+    
+    setIsCartOpen(false);
+    setIsSuccessOpen(true);
+    setCartItems([]); // Vaciar carrito local
+  } catch (error) {
+    console.error("Error en compra:", error);
+    setIsSuccessOpen(true);
+  }
+};
 
   return (
     <main className="relative min-h-screen bg-bg selection:bg-accent/30 selection:text-white antialiased">
@@ -237,8 +256,15 @@ export default function HomePage() {
         )}
       </AnimatePresence>
 
-      <CartDrawer isOpen={isCartOpen} onClose={() => setIsCartOpen(false)} cartItems={cartItems} onRemove={removeFromCart} onComplete={handlePurchase} />
-      <SuccessRitual isOpen={isSuccessOpen} onClose={() => setIsSuccessOpen(false)} />
+<CartDrawer 
+  isOpen={isCartOpen} 
+  onClose={() => setIsCartOpen(false)} 
+  cartItems={cartItems} 
+  onRemove={removeFromCart} 
+  onRemoveMultiple={removeMultipleFromCart}
+  onAdd={addToCart}
+  onComplete={handlePurchase} 
+/>
       
             {/* 3. Toast de Prueba Social Localizado */}
       <AnimatePresence>
