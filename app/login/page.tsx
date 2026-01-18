@@ -69,6 +69,23 @@ export default function LoginPage() {
               className="flex-1 py-4 rounded-xl border-2 border-accent/40 text-white font-black uppercase tracking-widest hover:border-accent disabled:opacity-50 transition-all"
             >
               {loading ? "..." : "Registrarse"}
+              {/* Después de los botones de Entrar/Registrarse, añade: */}
+
+<button
+  onClick={async () => {
+    const email = prompt("Escribe tu correo para recuperar contraseña:");
+    if (email) {
+      const { error } = await supabase.auth.resetPasswordForEmail(email, {
+        redirectTo: 'https://aura-reborn.vercel.app/reset-password'
+      });
+      if (error) alert(error.message);
+      else alert("Revisa tu correo para restablecer la contraseña");
+    }
+  }}
+  className="mt-4 text-xs text-accent hover:text-white transition-colors uppercase tracking-widest"
+>
+  ¿Olvidaste tu contraseña?
+</button>
             </button>
           </div>
         </div>
