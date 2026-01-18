@@ -1,5 +1,6 @@
 "use client";
 import { useState } from "react";
+import type { Perfume } from "@/lib/types";
 import { CreditCard, Lock, Loader2, Copy, Check, MessageCircle, Truck } from "lucide-react";
 import { createClient } from "@/lib/supabaseClient";
 
