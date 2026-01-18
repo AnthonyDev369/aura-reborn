@@ -1,5 +1,5 @@
 "use client";
-
+import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import { createClient } from "@/lib/supabaseClient";
 import { Package, Edit, Save, X } from "lucide-react";
@@ -22,6 +22,7 @@ export default function AdminPage() {
   const [orders, setOrders] = useState<Order[]>([]);
   const [editingId, setEditingId] = useState<string | null>(null);
   const [editData, setEditData] = useState<Partial<Order>>({});
+  const router = useRouter();
 
   useEffect(() => {
     loadOrders();
