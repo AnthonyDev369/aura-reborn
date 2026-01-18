@@ -76,8 +76,8 @@ export default function LoginPage() {
     const email = prompt("Escribe tu correo para recuperar contraseña:");
     if (email) {
       const { error } = await supabase.auth.resetPasswordForEmail(email, {
-        redirectTo: 'https://aura-reborn.vercel.app/reset-password'
-      });
+  redirectTo: 'http://localhost:3000/reset-password'  // Para testing
+});
       if (error) alert(error.message);
       else alert("Revisa tu correo para restablecer la contraseña");
     }
