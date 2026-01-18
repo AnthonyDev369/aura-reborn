@@ -28,16 +28,32 @@ export default function AdminPage() {
   }, []);
 
   async function loadOrders() {
-    const supabase = createClient();
-    
-    // ADMIN: Deshabilita RLS temporalmente para ver todas las órdenes
-    const { data } = await supabase
-      .from("orders")
-      .select("*")
-      .order("created_at", { ascending: false });
-
-    if (data) setOrders(data);
+  const supabase = createClient();
+  
+  const { data: { user } } = await supabase.auth.getUser();
+  
+  if (!user) {
+    router.push("/login");
+    return;
   }
+  
+  // SEGURIDAD: Solo permitir acceso al admin (TU EMAIL)
+  const ADMIN_EMAIL = "anthonybarreiro369@gmail.com"; // ← Cambia por tu email real
+  
+  if (user.email !== ADMIN_EMAIL) {
+    alert("Acceso denegado. Solo administradores.");
+    router.push("/");
+    return;
+  }
+  
+  // Cargar todas las órdenes
+  const { data } = await supabase
+    .from("orders")
+    .select("*")
+    .order("created_at", { ascending: false });
+
+  if (data) setOrders(data);
+}
 
   async function handleUpdate(orderId: string) {
     const supabase = createClient();
