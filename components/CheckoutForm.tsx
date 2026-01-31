@@ -798,20 +798,21 @@ export default function CheckoutForm({ onComplete, totalCents, cartItems, import
               </motion.div>
 )}
 
-{/* PAYPAL */}
+{/* PAYPAL - PRÓXIMAMENTE */}
 {paymentMethod === 'paypal' && (
   <motion.div
     initial={{ opacity: 0, y: 10 }}
     animate={{ opacity: 1, y: 0 }}
     transition={{ duration: 0.3 }}
-    className="p-8 rounded-3xl bg-blue-50 border-2 border-blue-200">
-    <div className="flex items-center gap-4 mb-6 pb-6 border-b border-blue-200">
-      <div className="h-14 w-14 bg-blue-600 rounded-2xl flex items-center justify-center text-white font-black text-2xl shadow-lg">
-        PP
+    className="p-8 rounded-3xl bg-blue-50 border-2 border-blue-200"
+  >
+    <div className="flex items-center gap-5 mb-6">
+      <div className="h-16 w-16 bg-blue-600 rounded-2xl flex items-center justify-center text-white flex-shrink-0 shadow-md">
+        <span className="text-4xl">🌎</span>
       </div>
       <div>
-        <p className="text-text text-lg font-black uppercase tracking-wide">PayPal</p>
-        <p className="text-blue-600 text-xs uppercase tracking-widest font-bold">Pago Internacional</p>
+        <p className="text-text text-xl font-black uppercase tracking-wide mb-1">PayPal</p>
+        <p className="text-blue-600 text-sm uppercase tracking-widest font-bold">Pago Internacional</p>
       </div>
     </div>
     
@@ -829,26 +830,14 @@ export default function CheckoutForm({ onComplete, totalCents, cartItems, import
       </div>
     </div>
     
-
-{/* Botón PayPal Real */}
-<div className="p-6 rounded-2xl bg-white border border-blue-200">
-  <p className="text-text text-sm font-bold mb-4">Pagar con PayPal:</p>
-  <PayPalButton
-    amount={totalDollars}
-    onSuccess={(details) => {
-      console.log("✅ Pago PayPal exitoso:", details);
-      alert("¡Pago confirmado! Procesando tu pedido...");
-      handleFinalize();
-    }}
-    onError={(err) => {
-      console.error("❌ Error PayPal:", err);
-      alert("Hubo un problema con el pago. Intenta de nuevo.");
-    }}
-  />
-</div>
-
-    </motion.div>
+    <div className="p-5 rounded-xl bg-yellow-50 border border-yellow-200">
+      <p className="text-yellow-700 text-sm">
+        ℹ️ <strong>Próximamente:</strong> PayPal en proceso de verificación. Por ahora usa transferencia bancaria o Takenos.
+      </p>
+    </div>
+  </motion.div>
 )}
+
 
 {/* DIFERIMIENTO CON TARJETA */}
 {paymentMethod === 'diferimiento' && (
