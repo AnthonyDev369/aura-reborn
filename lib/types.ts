@@ -38,13 +38,14 @@ export interface Order {
   courier: string | null;
   estimated_delivery: string | null;
   user_id: string;
-  is_preorder: boolean;
-  preorder_estimated_arrival: string | null;
-  payment_method: string;
-  payment_status: string;
-  payment_id: string | null;
-  paid_at: string | null;
+  is_preorder: boolean;              // ← LÍNEA 41
+  preorder_estimated_arrival: string | null;  // ← LÍNEA 42
+  payment_method: string;            // ← LÍNEA 43
+  payment_status: string;            // ← LÍNEA 44
+  payment_id: string | null;         // ← LÍNEA 45
+  paid_at: string | null;            // ← LÍNEA 46
 }
+
 
   
   // CAMPOS DE PRE-ORDEN
