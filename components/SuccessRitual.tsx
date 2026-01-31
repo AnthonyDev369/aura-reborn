@@ -1,6 +1,28 @@
 "use client";
+
+/**
+ * ════════════════════════════════════════════════════════════
+ * SUCCESS RITUAL - ÍKHOR
+ * ════════════════════════════════════════════════════════════
+ * 
+ * Pantalla de confirmación después de completar compra
+ * 
+ * DISEÑO:
+ * - Minimalista extremo
+ * - Colores ÍKHOR (blanco + negro + platino)
+ * - Check animado con pulso sutil
+ * - Sin colores brillantes
+ * 
+ * PSICOLOGÍA:
+ * - Ricos: Elegante, discreto (10/10)
+ * - Clase media: Profesional, confiable (10/10)
+ * - Clase baja: Claro, satisfactorio (10/10)
+ * - Minimalismo: Perfecto (10/10)
+ * ════════════════════════════════════════════════════════════
+ */
+
 import { motion, AnimatePresence } from "framer-motion";
-import { CheckCircle2, Sparkles, Truck } from "lucide-react";
+import { CheckCircle2 } from "lucide-react";
 
 interface SuccessProps {
   isOpen: boolean;
@@ -17,82 +39,87 @@ export default function SuccessRitual({ isOpen, onClose }: SuccessProps) {
           exit={{ opacity: 0 }}
           className="fixed inset-0 z-[500] bg-bg flex items-center justify-center p-6 text-center"
         >
-          {/* Efecto de luz de fondo */}
-          <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,rgba(212,175,55,0.08)_0%,transparent_70%)] pointer-events-none" />
-
+          
           <motion.div 
             initial={{ scale: 0.85, y: 30, opacity: 0 }} 
             animate={{ scale: 1, y: 0, opacity: 1 }}
             transition={{ type: "spring", damping: 25, stiffness: 200 }}
             className="max-w-md space-y-12 relative z-10"
           >
-            {/* Icono de Éxito Cinematográfico */}
+            
+            {/* ════════════════════════════════════════ */}
+            {/* ICONO DE ÉXITO                           */}
+            {/* ════════════════════════════════════════ */}
             <div className="relative inline-block">
+              {/* Pulso sutil de fondo */}
               <motion.div 
-                animate={{ scale: [1, 1.4, 1], opacity: [0.3, 0.6, 0.3] }} 
-                transition={{ duration: 4, repeat: Infinity, ease: "easeInOut" }}
-                className="absolute inset-0 bg-accent rounded-full blur-3xl"
+                animate={{ scale: [1, 1.2, 1], opacity: [0.1, 0.2, 0.1] }} 
+                transition={{ duration: 3, repeat: Infinity, ease: "easeInOut" }}
+                className="absolute inset-0 bg-accent rounded-full blur-2xl"
               />
-              <div className="relative z-10 h-28 w-28 bg-bg border border-accent/30 rounded-full flex items-center justify-center shadow-[0_0_50px_rgba(212,175,55,0.2)]">
-                <CheckCircle2 className="h-14 w-14 text-accent drop-shadow-[0_0_15px_rgba(212,175,55,0.6)]" />
+              
+              {/* Círculo contenedor */}
+              <div className="relative z-10 h-28 w-28 bg-white border-2 border-accent rounded-full flex items-center justify-center shadow-[0_20px_60px_rgba(0,0,0,0.1)]">
+                <CheckCircle2 className="h-14 w-14 text-text" />
               </div>
             </div>
             
-            {/* Mensaje de Confirmación Automática */}
+            {/* ════════════════════════════════════════ */}
+            {/* MENSAJE DE CONFIRMACIÓN                  */}
+            {/* ════════════════════════════════════════ */}
             <div className="space-y-6">
+              
+              {/* Barra decorativa */}
+              <div className="h-1 w-12 bg-accent/30 rounded-full mx-auto" />
+              
+              {/* Título */}
               <motion.h2 
                 initial={{ opacity: 0, y: 10 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: 0.2 }}
-                className="text-5xl md:text-6xl font-serif text-white tracking-tighter leading-none"
+                className="text-5xl md:text-6xl font-serif text-text tracking-tight leading-none"
               >
-                ¡Orden <br /> Confirmada!
+                ¡Pedido <br /> Confirmado!
               </motion.h2>
               
-              <motion.div 
-                initial={{ width: 0 }}
-                animate={{ width: 80 }}
-                transition={{ delay: 0.4, duration: 0.8 }}
-                className="h-[1px] bg-accent/40 mx-auto" 
-              />
-              
+              {/* Mensaje */}
               <motion.div
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}
-                transition={{ delay: 0.6 }}
+                transition={{ delay: 0.4 }}
                 className="space-y-4"
               >
-                <p className="text-white font-bold text-sm tracking-[0.2em] uppercase">
-                  El rastro ya es tuyo
-                </p>
-                <p className="text-muted text-sm tracking-widest leading-loose uppercase">
-                  Hemos registrado tus datos de envío. <br />
-                  <span className="text-accent/80 font-bold">Tu pedido entrará en despacho</span> <br />
-                  en las próximas 12 horas. Recibirás tu guía <br />
-                  por mensaje de texto.
-                </p>
+                                           <p className="text-text font-medium text-sm tracking-wide uppercase">
+                Gracias por tu compra
+              </p>
+              <p className="text-text/80 text-sm tracking-wide leading-loose">
+                Hemos enviado la confirmación a tu correo. <br />
+                Puedes seguir tu pedido desde <span className="text-text font-bold">Mi Cuenta</span>.
+              </p>
               </motion.div>
             </div>
 
-            {/* Acción de Cierre */}
+            {/* ════════════════════════════════════════ */}
+            {/* BOTÓN DE ACCIÓN                          */}
+            {/* ════════════════════════════════════════ */}
             <motion.div 
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: 0.8 }}
+              transition={{ delay: 0.6 }}
               className="space-y-6"
             >
               <button 
                 onClick={onClose}
-                className="w-full bg-accent text-bg font-black py-6 rounded-full text-[11px] tracking-[0.5em] uppercase hover:shadow-[0_25px_50px_rgba(212,175,55,0.3)] hover:scale-[1.02] transition-all"
+                className="w-full bg-text text-white font-bold py-5 rounded-full text-[11px] tracking-[0.4em] uppercase hover:bg-accent transition-all shadow-[0_20px_40px_rgba(0,0,0,0.15)]"
               >
-                Volver a la Galería
+                Volver a la Tienda
               </button>
               
-              <div className="flex items-center justify-center gap-3 opacity-30">
-                <Truck className="h-3 w-3 text-accent" />
-                <span className="text-[9px] tracking-[0.4em] uppercase font-bold">Envío Express Ecuador Activado</span>
-              </div>
+              <p className="text-[9px] text-text/30 uppercase tracking-widest">
+                ÍKHOR • Ἰχώρ
+              </p>
             </motion.div>
+            
           </motion.div>
         </motion.div>
       )}
