@@ -20,20 +20,8 @@ import { createClient } from "@/lib/supabaseClient";
 import { ShoppingBag, Heart, LogOut, Package, ArrowRight } from "lucide-react";
 import OrderTimeline from "@/components/OrderTimeline";
 import type { Perfume } from "@/lib/types";
+import type { Order } from "@/lib/types";
 
-interface Order {
-  id: string;
-  created_at: string;
-  customer_name: string;
-  city: string;
-  address: string;
-  whatsapp: string;
-  total_cents: number;
-  status: string;
-  tracking_number?: string;
-  courier?: string;
-  estimated_delivery?: string;
-}
 
 interface OrderItem {
   id: string;

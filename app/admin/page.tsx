@@ -31,25 +31,12 @@ import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import { createClient } from "@/lib/supabaseClient";
 import { Package, Edit, Save, X, Trash2, Search, Filter, TrendingUp } from "lucide-react";
+import type { Order } from "@/lib/types";
 
 // ─────────────────────────────────────────────────────────
 // INTERFACES
 // ─────────────────────────────────────────────────────────
 
-interface Order {
-  id: string;
-  created_at: string;
-  customer_name: string;
-  city: string;
-  address: string;
-  whatsapp: string;
-  total_cents: number;
-  status: string;
-  tracking_number?: string;
-  courier?: string;
-  estimated_delivery?: string;
-  user_id: string;
-}
 
 interface OrderItem {
   id: string;
