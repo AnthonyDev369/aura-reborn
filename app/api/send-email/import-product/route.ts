@@ -5,6 +5,18 @@ const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL!;
 const supabaseKey = process.env.NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY!;
 const supabase = createClient(supabaseUrl, supabaseKey);
 
+// Configurar CORS
+const corsHeaders = {
+  'Access-Control-Allow-Origin': '*',
+  'Access-Control-Allow-Methods': 'POST, OPTIONS',
+  'Access-Control-Allow-Headers': 'Content-Type',
+};
+
+// Manejar preflight
+export async function OPTIONS() {
+  return NextResponse.json({}, { headers: corsHeaders });
+}
+
 export async function POST(request: NextRequest) {
   try {
     const body = await request.json();
@@ -17,7 +29,7 @@ export async function POST(request: NextRequest) {
       ml: body.ml || 100,
       image_url: body.image_url,
       active: true,
-      stock: 0, // Pre-orden
+      stock: 0,
       lead_time_days: 20,
       is_preorder_enabled: true,
       category: body.category || 'diseñador_premium',
@@ -37,18 +49,18 @@ export async function POST(request: NextRequest) {
       return NextResponse.json({ 
         success: false, 
         error: error.message 
-      }, { status: 500 });
+      }, { status: 500, headers: corsHeaders });
     }
     
     return NextResponse.json({ 
       success: true, 
       product: data 
-    });
+    }, { headers: corsHeaders });
     
   } catch (error: any) {
     return NextResponse.json({ 
       success: false, 
       error: error.message 
-    }, { status: 500 });
+    }, { status: 500, headers: corsHeaders });
   }
 }
