@@ -175,6 +175,37 @@ export default function ProductsPage() {
               ← Volver
             </button>
           </div>
+          <button
+  onClick={async () => {
+    try {
+      const clipboard = await navigator.clipboard.readText();
+      const data = JSON.parse(clipboard);
+      const supabase = createClient();
+      const { error } = await supabase.from('perfumes').insert([{
+        name: data.nombre,
+        brand: data.marca,
+        price_cents: Math.round(data.precio_ikhor * 100),
+        cost_cents: Math.round(data.precio_proveedor * 100),
+        ml: data.ml || 100,
+        image_url: data.imagen,
+        description: data.descripcion,
+        active: true,
+        stock: 0,
+        lead_time_days: 20,
+        is_preorder_enabled: true,
+        category: 'diseñador_premium',
+        shipping_to_courier_cents: 1000,
+        shipping_to_ecuador_cents: 1500,
+        local_shipping_cents: 700
+      }]);
+      if (error) alert('Error: ' + error.message);
+      else { alert('✅ Producto importado!'); window.location.reload(); }
+    } catch (err) { alert('Error: ' + err.message); }
+  }}
+  className="px-6 py-3 bg-accent text-white rounded-xl hover:bg-text transition-all text-sm uppercase tracking-widest font-bold"
+>
+  📋 Importar desde Portapapeles
+</button>
         </div>
 
         {/* ════════════════════════════════════════════ */}
