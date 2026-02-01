@@ -200,7 +200,8 @@ export default function ProductsPage() {
       }]);
       if (error) alert('Error: ' + error.message);
       else { alert('✅ Producto importado!'); window.location.reload(); }
-    } catch (err) { alert('Error: ' + err.message); }
+    } catch (err: any) {
+ alert('Error: ' + err.message); }
   }}
   className="px-6 py-3 bg-accent text-white rounded-xl hover:bg-text transition-all text-sm uppercase tracking-widest font-bold"
 >

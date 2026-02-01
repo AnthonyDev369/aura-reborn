@@ -1,21 +1,5 @@
 "use client";
 
-/**
- * ════════════════════════════════════════════════════════════
- * IMPORT PANEL - ÍKHOR (Ἰχώρ)
- * ════════════════════════════════════════════════════════════
- * 
- * Panel de importación masiva desde proveedores
- * 
- * FUNCIONALIDADES:
- * - Importar página completa (100+ productos)
- * - Desde GiftExpress, Jomashop, FragranceX
- * - Cálculo automático de precio ÍKHOR
- * - Pre-orden por defecto (stock 0)
- * - Scraping desde servidor (sin CORS)
- * ════════════════════════════════════════════════════════════
- */
-
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { Download, Loader2 } from "lucide-react";
@@ -26,7 +10,6 @@ export default function ImportPage() {
   const [loading, setLoading] = useState(false);
   const [result, setResult] = useState<string | null>(null);
 
-  // Importar desde URL de categoría
   async function handleImportUrl() {
     setLoading(true);
     setResult(null);
@@ -54,13 +37,11 @@ export default function ImportPage() {
       setLoading(false);
     }
   }
+
   return (
     <main className="min-h-screen bg-bg py-32 px-8">
       <div className="max-w-4xl mx-auto">
         
-        {/* ════════════════════════════════════════════ */}
-        {/* HEADER                                       */}
-        {/* ════════════════════════════════════════════ */}
         <div className="mb-16 pb-8 border-b border-glassBorder">
           <div className="h-1 w-12 bg-accent/30 rounded-full mb-4" />
           <div className="flex justify-between items-center">
@@ -81,9 +62,6 @@ export default function ImportPage() {
           </div>
         </div>
 
-        {/* ════════════════════════════════════════════ */}
-        {/* IMPORTACIÓN MASIVA                           */}
-        {/* ════════════════════════════════════════════ */}
         <div className="bg-white border border-glassBorder p-8 rounded-3xl mb-8">
           <div className="flex items-center gap-3 mb-6">
             <Download className="h-6 w-6 text-accent" />
@@ -91,7 +69,6 @@ export default function ImportPage() {
           </div>
 
           <div className="space-y-6">
-            {/* Campo URL */}
             <div>
               <label className="text-muted text-xs uppercase tracking-widest mb-2 block">
                 URL de Categoría o Marca
@@ -110,7 +87,6 @@ export default function ImportPage() {
               </p>
             </div>
 
-            {/* Botón Importar */}
             <button
               onClick={handleImportUrl}
               disabled={!productUrl || loading}
@@ -129,7 +105,6 @@ export default function ImportPage() {
               )}
             </button>
 
-            {/* Resultado */}
             {result && (
               <div className={`p-6 rounded-2xl ${
                 result.includes('✅') 
@@ -145,9 +120,6 @@ export default function ImportPage() {
             )}
           </div>
         </div>
-        {/* ════════════════════════════════════════════ */}
-        {/* INSTRUCCIONES DE USO                         */}
-        {/* ════════════════════════════════════════════ */}
         <div className="p-8 rounded-3xl bg-gradient-to-br from-blue-50 to-blue-100 border border-blue-200">
           <p className="text-blue-700 font-bold text-base mb-5">
             💡 Cómo funciona la Importación Masiva:

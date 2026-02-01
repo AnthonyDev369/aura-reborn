@@ -6,7 +6,6 @@ const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL!;
 const supabaseKey = process.env.NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY!;
 const supabase = createClient(supabaseUrl, supabaseKey);
 
-// CORS headers
 const corsHeaders = {
   'Access-Control-Allow-Origin': '*',
   'Access-Control-Allow-Methods': 'POST, GET, OPTIONS',
@@ -17,7 +16,6 @@ export async function OPTIONS() {
   return NextResponse.json({}, { headers: corsHeaders });
 }
 
-// Calcular precio ÍKHOR
 function calculateIkhorPrice(costUSD: number): number {
   const totalCost = costUSD + 10 + 15 + 7;
   const margin = 0.20 + 0.35;
@@ -25,11 +23,16 @@ function calculateIkhorPrice(costUSD: number): number {
   return Math.floor(price) + 0.99;
 }
 
-// Extraer productos de una página de listado
-async function scrapeCategoryPage(url: string) {
+interface ScrapedProduct {
+  name: string;
+  price: number;
+  image: string;
+  link: string;
+  brand: string;
+}
+
+async function scrapeCategoryPage(url: string): Promise<ScrapedProduct[]> {
   try {
-    console.log('🔍 Scraping:', url);
-    
     const response = await fetch(url, {
       headers: {
         'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36'
@@ -38,9 +41,8 @@ async function scrapeCategoryPage(url: string) {
     
     const html = await response.text();
     const $ = cheerio.load(html);
-    const products = [];
+    const products: ScrapedProduct[] = [];
 
-    // GiftExpress - Productos en lista
     if (url.includes('giftexpress.com')) {
       $('li.flex.flex-col').each((i, el) => {
         const $el = $(el);
@@ -63,53 +65,48 @@ async function scrapeCategoryPage(url: string) {
       });
     }
 
-    console.log(`✅ Encontrados: ${products.length} productos`);
     return products;
-    
-  } catch (error: any) {
-    console.error('❌ Error scraping:', error.message);
+  } catch (error) {
+    console.error('Error scraping:', error);
     return [];
   }
 }
-// Importar productos masivamente a Supabase
-async function importProducts(products: any[]) {
-  const imported = [];
-  const errors = [];
+
+async function importProducts(products: ScrapedProduct[]) {
+  const imported: string[] = [];
+  const errors: any[] = [];
 
   for (const product of products) {
     try {
       const ikhorPrice = calculateIkhorPrice(product.price);
       
-      const productData = {
-        name: product.name,
-        description: '',
-        price_cents: Math.round(ikhorPrice * 100),
-        cost_cents: Math.round(product.price * 100),
-        ml: 100,
-        image_url: product.image,
-        active: true,
-        stock: 0, // Pre-orden
-        lead_time_days: 20,
-        is_preorder_enabled: true,
-        category: 'diseñador_premium',
-        brand: product.brand || 'GiftExpress',
-        shipping_to_courier_cents: 1000,
-        shipping_to_ecuador_cents: 1500,
-        local_shipping_cents: 700
-      };
-
       const { data, error } = await supabase
         .from('perfumes')
-        .insert([productData])
+        .insert([{
+          name: product.name,
+          description: '',
+          price_cents: Math.round(ikhorPrice * 100),
+          cost_cents: Math.round(product.price * 100),
+          ml: 100,
+          image_url: product.image,
+          active: true,
+          stock: 0,
+          lead_time_days: 20,
+          is_preorder_enabled: true,
+          category: 'diseñador_premium',
+          brand: product.brand,
+          shipping_to_courier_cents: 1000,
+          shipping_to_ecuador_cents: 1500,
+          local_shipping_cents: 700
+        }])
         .select()
         .single();
 
       if (error) {
         errors.push({ name: product.name, error: error.message });
       } else {
-        imported.push(data);
+        imported.push(product.name);
       }
-      
     } catch (err: any) {
       errors.push({ name: product.name, error: err.message });
     }
@@ -118,7 +115,6 @@ async function importProducts(products: any[]) {
   return { imported, errors };
 }
 
-// Endpoint principal
 export async function GET(request: NextRequest) {
   try {
     const url = request.nextUrl.searchParams.get('url');
@@ -129,7 +125,6 @@ export async function GET(request: NextRequest) {
       }, { status: 400, headers: corsHeaders });
     }
 
-    // Scraping de página de categoría
     const products = await scrapeCategoryPage(url);
     
     if (products.length === 0) {
@@ -139,7 +134,6 @@ export async function GET(request: NextRequest) {
       }, { status: 200, headers: corsHeaders });
     }
 
-    // Importar todos los productos
     const result = await importProducts(products);
 
     return NextResponse.json({
@@ -148,7 +142,7 @@ export async function GET(request: NextRequest) {
       imported: result.imported.length,
       errors: result.errors.length,
       details: {
-        imported: result.imported.map(p => p.name),
+        imported: result.imported,
         errors: result.errors
       }
     }, { headers: corsHeaders });
