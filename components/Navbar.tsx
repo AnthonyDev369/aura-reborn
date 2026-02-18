@@ -58,12 +58,15 @@ export default function Navbar({ onOpenCart, cartCount }: NavbarProps) {
           
           {/* Botón del Carrito */}
           <motion.button
-            onClick={onOpenCart}
-            whileHover={{ scale: 1.05 }}
-            whileTap={{ scale: 0.95 }}
-            className="relative p-2 text-text/60 hover:text-text transition-colors group"
-          >
-            <ShoppingBag className="h-5 w-5" />
+  onClick={onOpenCart}
+  whileHover={{ scale: 1.05 }}
+  whileTap={{ scale: 0.95 }}
+  className="relative p-2 text-text/60 hover:text-text transition-colors group"
+  suppressHydrationWarning
+>
+
+            <ShoppingBag className="h-5 w-5" suppressHydrationWarning />
+
             
             {/* Contador de Items - Solo visible si hay productos */}
             {cartCount > 0 && (
@@ -79,13 +82,16 @@ export default function Navbar({ onOpenCart, cartCount }: NavbarProps) {
 
           {/* Botón de Mi Cuenta */}
           <motion.button
-            onClick={() => window.location.href = "/account"}
-            whileHover={{ scale: 1.05 }}
-            whileTap={{ scale: 0.95 }}
-            className="p-2 rounded-full hover:bg-bg transition-all group"
-            title="Mi Cuenta"
-          >
-            <User className="h-5 w-5 text-text/60 group-hover:text-text transition-colors" />
+  suppressHydrationWarning
+  onClick={() => window.location.href = "/account"}
+  whileHover={{ scale: 1.05 }}
+  whileTap={{ scale: 0.95 }}
+  className="p-2 rounded-full hover:bg-bg transition-all group"
+  title="Mi Cuenta"
+>
+
+         <User className="h-5 w-5 text-text/60 group-hover:text-text transition-colors" suppressHydrationWarning />
+
           </motion.button>
           
         </div>

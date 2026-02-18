@@ -798,45 +798,105 @@ export default function CheckoutForm({ onComplete, totalCents, cartItems, import
               </motion.div>
 )}
 
-{/* PAYPAL - PRÓXIMAMENTE */}
+{/* PAYPAL - 40/40 */}
 {paymentMethod === 'paypal' && (
   <motion.div
     initial={{ opacity: 0, y: 10 }}
     animate={{ opacity: 1, y: 0 }}
     transition={{ duration: 0.3 }}
-    className="p-8 rounded-3xl bg-blue-50 border-2 border-blue-200"
+    className="space-y-6"
   >
-    <div className="flex items-center gap-5 mb-6">
-      <div className="h-16 w-16 bg-blue-600 rounded-2xl flex items-center justify-center text-white flex-shrink-0 shadow-md">
-        <span className="text-4xl">🌎</span>
+    {/* Header Premium */}
+    <div className="p-8 rounded-3xl bg-gradient-to-br from-blue-50 to-blue-100 border-2 border-blue-200 shadow-lg">
+      <div className="flex items-center gap-5 mb-8 pb-6 border-b border-blue-200">
+        <div className="h-16 w-16 bg-blue-600 rounded-2xl flex items-center justify-center text-white flex-shrink-0 shadow-md">
+          <span className="text-4xl font-black">P</span>
+        </div>
+        <div>
+          <p className="text-text text-2xl font-black uppercase tracking-wide mb-1">
+            PayPal
+          </p>
+          <p className="text-blue-600 text-sm uppercase tracking-widest font-bold">
+            Pago Instantáneo • Seguro
+          </p>
+        </div>
       </div>
-      <div>
-        <p className="text-text text-xl font-black uppercase tracking-wide mb-1">PayPal</p>
-        <p className="text-blue-600 text-sm uppercase tracking-widest font-bold">Pago Internacional</p>
+
+      {/* Ventajas */}
+      <div className="p-6 rounded-2xl bg-white border border-blue-200 mb-6">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <div className="flex items-start gap-3">
+            <div className="h-8 w-8 bg-green-50 rounded-full flex items-center justify-center flex-shrink-0">
+              <Check className="h-5 w-5 text-green-600" />
+            </div>
+            <div>
+              <p className="text-text font-bold text-sm">Protección al Comprador</p>
+              <p className="text-muted text-xs">Reembolso garantizado</p>
+            </div>
+          </div>
+
+          <div className="flex items-start gap-3">
+            <div className="h-8 w-8 bg-green-50 rounded-full flex items-center justify-center flex-shrink-0">
+              <Check className="h-5 w-5 text-green-600" />
+            </div>
+            <div>
+              <p className="text-text font-bold text-sm">Tarjetas Internacionales</p>
+              <p className="text-muted text-xs">Visa, Mastercard, Amex</p>
+            </div>
+          </div>
+
+          <div className="flex items-start gap-3">
+            <div className="h-8 w-8 bg-green-50 rounded-full flex items-center justify-center flex-shrink-0">
+              <Check className="h-5 w-5 text-green-600" />
+            </div>
+            <div>
+              <p className="text-text font-bold text-sm">Multi-moneda</p>
+              <p className="text-muted text-xs">USD, EUR, GBP, etc.</p>
+            </div>
+          </div>
+
+          <div className="flex items-start gap-3">
+            <div className="h-8 w-8 bg-green-50 rounded-full flex items-center justify-center flex-shrink-0">
+              <Check className="h-5 w-5 text-green-600" />
+            </div>
+            <div>
+              <p className="text-text font-bold text-sm">Confirmación Instantánea</p>
+              <p className="text-muted text-xs">Automático y rápido</p>
+            </div>
+          </div>
+        </div>
       </div>
-    </div>
-    
-    <div className="p-6 rounded-2xl bg-white border border-blue-200 mb-6">
-      <div className="space-y-3">
-        <p className="text-blue-600 text-sm font-bold flex items-center gap-2">
-          <Check className="h-4 w-4" /> Protección al comprador
-        </p>
-        <p className="text-blue-600 text-sm font-bold flex items-center gap-2">
-          <Check className="h-4 w-4" /> Tarjetas internacionales
-        </p>
-        <p className="text-blue-600 text-sm font-bold flex items-center gap-2">
-          <Check className="h-4 w-4" /> Pago en USD, EUR, etc.
+
+      {/* Botón PayPal */}
+      <div className="p-8 rounded-3xl bg-white border-2 border-blue-300">
+        <div className="mb-6">
+          <p className="text-text font-bold text-base mb-2">Pagar con PayPal:</p>
+          <p className="text-muted text-sm">
+            Serás redirigido a PayPal para completar el pago de forma segura.
+          </p>
+        </div>
+        
+        <PayPalButton
+          amount={totalDollars}
+          onSuccess={(details) => {
+            console.log("✅ Pago PayPal exitoso:", details);
+            alert("¡Pago confirmado! Procesando tu pedido...");
+            handleFinalize();
+          }}
+          onError={(err) => {
+            console.error("❌ Error PayPal:", err);
+            alert("Hubo un problema con el pago. Intenta de nuevo.");
+          }}
+        />
+        
+        <p className="text-center text-muted text-xs uppercase tracking-widest mt-4">
+          Procesado por PayPal • Seguro y Confiable
         </p>
       </div>
-    </div>
-    
-    <div className="p-5 rounded-xl bg-yellow-50 border border-yellow-200">
-      <p className="text-yellow-700 text-sm">
-        ℹ️ <strong>Próximamente:</strong> PayPal en proceso de verificación. Por ahora usa transferencia bancaria o Takenos.
-      </p>
     </div>
   </motion.div>
 )}
+
 
 
 {/* DIFERIMIENTO CON TARJETA */}

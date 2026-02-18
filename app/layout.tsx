@@ -16,7 +16,8 @@ export const metadata: Metadata = {
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
-    <html lang="es" className="dark">
+   <html lang="es" className="dark" suppressHydrationWarning>
+
       <body className={`${playfair.variable} ${inter.variable} font-sans...`}>
   <CustomCursor />
   <PayPalWrapper>

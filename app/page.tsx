@@ -71,6 +71,38 @@ export default function HomePage() {
   "Cuenca", "Manta", "Salinas", "Montañita",
   "Loja", "Ambato", "Ibarra", "Machala"];
 
+
+  // Estados de filtrado y búsqueda
+const [searchQuery, setSearchQuery] = useState("");
+const [selectedBrand, setSelectedBrand] = useState<string | null>(null);
+const [filteredProducts, setFilteredProducts] = useState<Perfume[]>([]);
+
+// Obtener marcas únicas
+const brands = [...new Set(products.map(p => p.brand).filter(Boolean))].sort();
+
+// Filtrar productos en tiempo real
+useEffect(() => {
+  let filtered = products;
+  
+  // Filtro por marca
+  if (selectedBrand) {
+    filtered = filtered.filter(p => p.brand === selectedBrand);
+  }
+  
+  // Filtro por búsqueda
+  if (searchQuery.trim()) {
+    const query = searchQuery.toLowerCase();
+    filtered = filtered.filter(p => 
+      p.name.toLowerCase().includes(query) ||
+      (p.brand?.toLowerCase() || '').includes(query) ||
+      (p.description?.toLowerCase() || '').includes(query)
+    );
+  }
+  
+  setFilteredProducts(filtered);
+}, [searchQuery, selectedBrand, products]);
+
+
   // ─────────────────────────────────────────────────────────
   // FUNCIÓN: Obtener carrito desde Supabase
   // ─────────────────────────────────────────────────────────
@@ -117,6 +149,11 @@ export default function HomePage() {
         const supabase = createClient();
         const { data } = await supabase.from("perfumes").select("*").eq("active", true);
         if (data) setProducts(data);
+        if (data) {
+  setProducts(data);
+  setFilteredProducts(data); // Inicializar filtrados con todos
+}
+
       } catch (e) {
         console.error(e);
       } finally {
@@ -342,7 +379,8 @@ const loadVariants = async (perfumeId: string) => {
           whileInView={{ opacity: 1 }} 
           viewport={{ once: true }}
         >
-          <Sparkles className="h-8 w-8 text-accent mx-auto mb-12" />
+          <Sparkles className="h-8 w-8 text-accent mx-auto mb-12" suppressHydrationWarning />
+
           <h2 className="text-4xl md:text-5xl font-serif italic text-text/80 max-w-3xl mx-auto leading-snug tracking-tight">
             "No vestimos el cuerpo, vestimos la memoria que dejas al pasar."
           </h2>
@@ -351,6 +389,73 @@ const loadVariants = async (perfumeId: string) => {
           </p>
         </motion.div>
       </section>
+
+
+      {/* ════════════════════════════════════════════════════ */}
+      {/* BUSCADOR Y FILTROS - 40/40                          */}
+      {/* ════════════════════════════════════════════════════ */}
+      <section className="px-8 py-12 border-b border-glassBorder">
+        <div className="max-w-[1400px] mx-auto">
+          
+          {/* Buscador */}
+          <div className="mb-8">
+            <div className="relative max-w-2xl mx-auto">
+              <input
+                type="text"
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
+                placeholder="Buscar perfume, marca o nota..."
+                className="w-full p-5 pr-14 bg-white border-2 border-glassBorder rounded-full text-text placeholder:text-muted/40 outline-none focus:border-accent transition-all text-base"
+              />
+              <div className="absolute right-5 top-1/2 -translate-y-1/2">
+                <svg className="h-5 w-5 text-muted" fill="none" stroke="currentColor" viewBox="0 0 24 24" suppressHydrationWarning>
+  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+</svg>
+
+              </div>
+            </div>
+          </div>
+
+          {/* Filtros por Marca */}
+          <div className="flex flex-wrap justify-center gap-3">
+            {/* Botón "Todas" */}
+            <button
+              onClick={() => setSelectedBrand(null)}
+              className={`px-6 py-3 rounded-full border-2 text-sm font-bold uppercase tracking-widest transition-all ${
+                selectedBrand === null
+                  ? 'border-text bg-text text-white'
+                  : 'border-glassBorder text-text hover:border-accent'
+              }`}
+            >
+              Todas
+            </button>
+            
+            {/* Botones por marca */}
+            {brands.map((brand) => (
+              <button
+                key={brand}
+                onClick={() => setSelectedBrand(brand || null)}
+                className={`px-6 py-3 rounded-full border-2 text-sm font-bold uppercase tracking-widest transition-all ${
+                  selectedBrand === brand
+                    ? 'border-text bg-text text-white'
+                    : 'border-glassBorder text-text hover:border-accent'
+                }`}
+              >
+                {brand}
+              </button>
+            ))}
+          </div>
+
+          {/* Contador de resultados */}
+          {(searchQuery || selectedBrand) && (
+            <p className="text-center text-muted text-sm uppercase tracking-widest mt-6">
+              {filteredProducts.length} {filteredProducts.length === 1 ? 'resultado' : 'resultados'}
+            </p>
+          )}
+        </div>
+      </section>
+
+
 
       {/* ════════════════════════════════════════════════════ */}
       {/* GRID DE PRODUCTOS                                    */}
@@ -368,7 +473,8 @@ const loadVariants = async (perfumeId: string) => {
             </div>
           ) : (
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-16">
-              {products.map((product, index) => (
+              {(searchQuery || selectedBrand ? filteredProducts : products).map((product, index) =>
+ (
                 <div 
   key={product.id} 
   onClick={() => {
@@ -391,6 +497,26 @@ const loadVariants = async (perfumeId: string) => {
           )}
         </div>
       </section>
+
+{/* Sin resultados */}
+{(searchQuery || selectedBrand) && filteredProducts.length === 0 && (
+  <div className="text-center py-20">
+    <p className="text-muted text-lg uppercase tracking-widest mb-4">
+      No se encontraron productos
+    </p>
+    <button
+      onClick={() => {
+        setSearchQuery("");
+        setSelectedBrand(null);
+      }}
+      className="px-6 py-3 border border-glassBorder text-text rounded-xl hover:bg-bg transition-all text-sm uppercase tracking-widest font-bold"
+    >
+      Limpiar Filtros
+    </button>
+  </div>
+)}
+
+
       {/* ════════════════════════════════════════════ */}
       {/* MODAL DE PRODUCTO - COMPLETA Y MEJORADA      */}
       {/* ════════════════════════════════════════════ */}
@@ -462,8 +588,15 @@ const loadVariants = async (perfumeId: string) => {
                 
                 {/* Marca/Categoría */}
                 <p className="text-muted text-sm uppercase tracking-widest mb-8">
-                  Eau de Parfum • {selectedPerfume.category?.replace('_', ' ')}
-                </p>
+  {selectedPerfume.concentration || 'Eau de Parfum'} • {selectedPerfume.category?.replace('arabe_medio', 'Arabe')
+                        .replace('arabe_premium', 'Arabe Premium')
+                        .replace('diseñador_premium', 'Diseñador')
+                        .replace('diseñador_mainstream', 'Diseñador')
+                        .replace('nicho_accesible', 'Nicho')
+                        .replace('ultra_nicho', 'Nicho')
+                        .replace('_', ' ')}
+
+</p>
 
                 {/* SELECTOR DE TAMAÑOS */}
                 {perfumeVariants.length > 0 && (

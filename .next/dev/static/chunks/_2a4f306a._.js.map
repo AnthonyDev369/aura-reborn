@@ -1,0 +1,6 @@
+{
+  "version": 3,
+  "sources": [],
+  "sections": [
+    {"offset": {"line": 4, "column": 0}, "map": {"version":3,"sources":["file:///C:/Users/Anthony/Documents/vscode/AURA_V3/aura-reborn/lib/supabaseClient.ts"],"sourcesContent":["import { createBrowserClient } from \"@supabase/ssr\";\r\n\r\nconst supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL || \"\";\r\nconst supabaseKey = process.env.NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY || \"\";\r\n\r\nexport function createClient() {\r\n  return createBrowserClient(supabaseUrl, supabaseKey);\r\n}\r\n"],"names":[],"mappings":";;;;AAEoB;AAFpB;AAAA;;AAEA,MAAM,cAAc,gFAAwC;AAC5D,MAAM,cAAc,sFAAoD;AAEjE,SAAS;IACd,OAAO,IAAA,oMAAmB,EAAC,aAAa;AAC1C"}}]
+}
