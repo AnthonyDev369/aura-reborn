@@ -10,7 +10,7 @@ export function useProducts() {
   const [selectedBrand, setSelectedBrand] = useState<string | null>(null);
   const [importSettings, setImportSettings] = useState<ImportSettings | null>(null);
 
-  const brands = [...new Set(products.map(p => p.brand).filter(Boolean))].sort() as string[];
+  const brands = [...new Set(products.map(p => p.brand).filter((b): b is string => Boolean(b)))].sort();
 
   useEffect(() => {
     let filtered = products;
