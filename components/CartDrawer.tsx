@@ -34,7 +34,7 @@
 import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { X, ShoppingBag, Trash2, Plus, Minus, Droplets } from "lucide-react";
-import type { Perfume } from "@/lib/types";
+import type { Perfume, ImportSettings } from "@/lib/types";
 import CheckoutForm from "./CheckoutForm";
 
 // ─────────────────────────────────────────────────────────
@@ -48,7 +48,7 @@ interface CartProps {
   onRemove: (index: number) => void;
   onRemoveMultiple: (indices: number[]) => void;
   onAdd: (perfume: Perfume) => void;
-  importSettings: any;
+  importSettings: ImportSettings | null;
   onComplete: () => void;
 }
 

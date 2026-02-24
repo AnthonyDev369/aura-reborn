@@ -1,7 +1,0 @@
-{
-  "/admin/page": "app/admin/page.js",
-  "/admin/pricing/page": "app/admin/pricing/page.js",
-  "/admin/products/page": "app/admin/products/page.js",
-  "/api/import-product/route": "app/api/import-product/route.js",
-  "/page": "app/page.js"
-}
