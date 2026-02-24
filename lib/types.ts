@@ -98,10 +98,10 @@ export interface CartItem extends Perfume {
 export interface SavedAddress {
   id: string;
   user_id: string;
-  nombre: string;
+  name: string;
   whatsapp: string;
-  ciudad: string;
-  direccion: string;
+  city: string;
+  address: string;
   is_default: boolean;
 }
 
