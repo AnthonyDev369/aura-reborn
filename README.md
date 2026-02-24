@@ -1,36 +1,98 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# ÍKHOR (Ἰχώρ) — Premium Perfume Store
+
+Premium perfume e-commerce platform for Ecuador, featuring a pre-order system, multi-payment methods, and a refined minimalist UI.
+
+## Tech Stack
+
+- **Framework:** Next.js 14 (App Router), TypeScript
+- **Styling:** Tailwind CSS, Framer Motion
+- **Backend:** Supabase (PostgreSQL + Auth + RLS)
+- **Payments:** PayPhone, PayPal, Transferencia Bancaria, Takenos
+- **Hosting:** Vercel
+
+## Features
+
+- 🛒 Pre-order system with automatic lead-time calculation
+- 💳 Multi-payment: PayPhone, PayPal, Bank Transfer, Takenos (crypto/international)
+- 🔔 Social proof toasts ("VENDIDO" notifications)
+- 🧴 Variant selector (size/ml per product)
+- 🔍 Real-time search & brand filter
+- 📦 Import quota management (courier/viajero)
+- 📊 Admin panel with order tracking & pricing calculator
 
 ## Getting Started
 
-First, run the development server:
+1. **Install dependencies:**
+   ```bash
+   npm install
+   ```
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+2. **Configure environment variables:**
+   ```bash
+   cp .env.example .env.local
+   # Fill in your Supabase, PayPal, and Resend credentials
+   ```
+
+3. **Run the development server:**
+   ```bash
+   npm run dev
+   ```
+
+   Open [http://localhost:3000](http://localhost:3000) in your browser.
+
+## Environment Variables
+
+See `.env.example` for required variables:
+
+| Variable | Description |
+|---|---|
+| `NEXT_PUBLIC_SUPABASE_URL` | Supabase project URL |
+| `NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY` | Supabase anon key |
+| `NEXT_PUBLIC_PAYPAL_CLIENT_ID` | PayPal client ID |
+| `RESEND_API_KEY` | Resend API key for emails |
+
+## Project Structure
+
+```
+aura-reborn/
+├─ app/
+│  ├─ page.tsx              # Home (products, filters, search)
+│  ├─ layout.tsx            # Global layout + PayPal provider
+│  ├─ globals.css           # Global styles
+│  ├─ login/                # Authentication
+│  ├─ account/              # Customer panel (orders, wishlist)
+│  ├─ reset-password/       # Password recovery
+│  └─ admin/                # Admin panel (orders, products, pricing)
+├─ components/
+│  ├─ Navbar.tsx            # Logo + Cart + User
+│  ├─ ProductCard.tsx       # Product card (stock/pre-order badges)
+│  ├─ CartDrawer.tsx        # Side cart drawer
+│  ├─ CheckoutForm.tsx      # Checkout (5 payment methods)
+│  ├─ HeroSection.tsx       # Hero section
+│  ├─ ProductModal.tsx      # Product detail modal
+│  └─ Footer.tsx            # Footer
+├─ hooks/
+│  ├─ useCart.ts            # Cart state & logic
+│  ├─ useProducts.ts        # Product fetching & filtering
+│  └─ useSocialProof.ts     # Social proof toast logic
+├─ lib/
+│  ├─ types.ts              # TypeScript interfaces
+│  ├─ supabaseClient.ts     # Supabase client
+│  ├─ cart.ts               # Cart DB operations
+│  └─ emails.ts             # Email templates
+└─ tailwind.config.ts       # Platinum Whisper design system
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+## Design System
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+**Palette: Platinum Whisper**
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+| Token | Value | Use |
+|---|---|---|
+| `bg` | `#FDFBF7` | Ivory white background |
+| `text` | `#1C1917` | Stone black text |
+| `accent` | `#A8A29E` | Platinum champagne |
+| `muted` | `#78716C` | Dark stone |
 
-## Learn More
+**Typography:** Inter (body) + Playfair Display (headings/logo)
 
-To learn more about Next.js, take a look at the following resources:
-
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
