@@ -58,3 +58,53 @@ export interface Order {
   payment_id?: string;
   paid_at?: string;
 }
+
+export interface PerfumeVariant {
+  id: string;
+  perfume_id: string;
+  size_ml: number;
+  price_cents: number;
+  cost_cents: number;
+  stock: number;
+  is_tester: boolean;
+  is_default: boolean;
+  is_preorder_enabled?: boolean;
+  active: boolean;
+}
+
+export interface ImportSettings {
+  id: string;
+  active_method: 'courier' | 'viajero';
+  courier_quota_limit_cents: number;
+  courier_quota_used_cents: number;
+  courier_supplier_days_min: number;
+  courier_supplier_days_max: number;
+  courier_shipping_days: number;
+  courier_warehouse_days_min: number;
+  courier_warehouse_days_max: number;
+  viajero_supplier_days_min: number;
+  viajero_supplier_days_max: number;
+  viajero_shipping_days_min: number;
+  viajero_shipping_days_max: number;
+  viajero_warehouse_days_min: number;
+  viajero_warehouse_days_max: number;
+}
+
+export interface CartItem extends Perfume {
+  quantity?: number;
+  variant_id?: string;
+}
+
+export interface SavedAddress {
+  id: string;
+  user_id: string;
+  name: string;
+  whatsapp: string;
+  city: string;
+  address: string;
+  is_default: boolean;
+}
+
+export type PaymentMethod = 'transferencia' | 'payphone' | 'paypal' | 'diferimiento' | 'takenos';
+
+export type OrderStatus = 'esperando_pago' | 'confirmado' | 'preparando' | 'enviado' | 'entregado';
