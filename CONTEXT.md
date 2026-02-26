@@ -143,7 +143,7 @@ ML: Del nombre o default 100ml
 Importación batch a Supabase
 
 5. Métodos de Pago
-PayPal: Automático (sandbox: AfsWGP...)
+PayPal: Automático (credenciales en env vars)
 
 Transferencia: 4 bancos (Pichincha, Guayaquil, Produbanco, Internacional)
 
@@ -154,7 +154,7 @@ PayPhone: Próximamente (verificación pendiente)
 Diferimiento: Próximamente
 
 🔒 SEGURIDAD
-Middleware: Protege /admin (solo anthonybarreiro369@gmail.com)
+Middleware: Protege /admin (solo administradores autorizados)
 
 RLS: Row Level Security en todas las tablas
 
@@ -185,11 +185,11 @@ Clase baja (10/10): Fácil de usar, accesible, sin confusión
 Minimalismo (10/10): Solo lo esencial, espacios perfectos
 
 📧 CONTACTOS
-Email negocio: ikhor.ec@proton.me
+Email negocio: [stored in env vars]
 
-Email personal: anthonybarreiro369@gmail.com
+Email personal: [stored in env vars]
 
-PayPal: anthonybarreiro369@gmail.com (sandbox)
+PayPal: [stored in env vars]
 
 🌐 URLs
 Producción: https://ikhor.store
@@ -225,9 +225,9 @@ Importa a Supabase con stock 0
 Productos aparecen en ikhor.store con badge de pre-orden
 
 📊 DATOS CRÍTICOS
-Cédula: 0706944253
+Cédula: [stored privately]
 
-Titular cuentas: Anthony Alexander Barreiro Jaen (o "A. Barreiro - ÍKHOR")
+Titular cuentas: [stored privately]
 
 Cupo usado actual: ~$150/$1,000
 
