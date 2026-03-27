@@ -1,36 +1,64 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# ÍKHOR (Ἰχώρ) — Premium Perfume Store
 
-## Getting Started
+> *"No vestimos el cuerpo, vestimos la memoria que dejas al pasar."*
 
-First, run the development server:
+E-commerce de perfumería premium para Ecuador con sistema de **pre-orden automática** — el primero en LatAm.
+
+## ✨ Features
+
+- 🧴 **Pre-orden Automática** — Stock 0? El cliente compra igual con días estimados de llegada
+- 💳 **Multi-Pago** — PayPal, Transferencia (4 bancos), Takenos (cripto)
+- 📦 **Gestión de Cupos** — Control automático del límite aduanero $1,000
+- 🧮 **Calculadora de Pricing** — Fórmula híbrida con márgenes por categoría
+- 📥 **Importación Masiva** — Scraping inteligente desde proveedores
+- 🔐 **Seguridad** — Middleware de protección + RLS en Supabase
+- 🎨 **Diseño Premium** — Glassmorphism, cursor personalizado, animaciones 60fps
+
+## 🛠 Stack Tecnológico
+
+| Categoría | Tecnología |
+|-----------|-----------|
+| Frontend | Next.js 16, React 19, TypeScript, Tailwind CSS |
+| Animaciones | Framer Motion |
+| Backend | Supabase (PostgreSQL + Auth + RLS) |
+| Pagos | PayPal, Transferencia Bancaria, Takenos |
+| Email | Resend |
+| Hosting | Vercel |
+| Scraping | Cheerio + Axios |
+
+## 🚀 Getting Started
+
+1. Clone the repo
+2. Copy `.env.example` to `.env.local` and fill in your values
+3. Install dependencies and run:
 
 ```bash
+npm install
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Open [http://localhost:3000](http://localhost:3000)
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## 📁 Project Structure
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+```
+├── app/               # Next.js App Router pages
+│   ├── page.tsx       # Home (products, filters, search)
+│   ├── layout.tsx     # Global layout + providers
+│   ├── admin/         # Admin panel (orders, products, pricing)
+│   ├── login/         # Authentication
+│   ├── account/       # Customer panel
+│   └── api/           # API routes (scraping, email, import)
+├── components/        # Reusable UI components
+├── hooks/             # Custom React hooks
+├── lib/               # Utilities, types, Supabase client
+└── src/               # Middleware
+```
 
-## Learn More
+## 🌐 Deploy
 
-To learn more about Next.js, take a look at the following resources:
+Deployed on [Vercel](https://vercel.com). Push to `main` to auto-deploy.
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+## 📄 License
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+Private — All rights reserved.

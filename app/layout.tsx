@@ -10,8 +10,25 @@ const playfair = Playfair_Display({ subsets: ["latin"], variable: "--font-serif"
 const inter = Inter({ subsets: ["latin"], variable: "--font-sans" });
 
 export const metadata: Metadata = {
-  title: "ÍKHOR — E-Commerce de Lujo",
-  description: "Experiencia sensorial de alta perfumería.",
+  title: "ÍKHOR — Perfumería Premium Ecuador",
+  description: "Perfumes originales importados con pre-orden automática. Envío a todo Ecuador. PayPal, transferencia bancaria y cripto.",
+  keywords: ["perfumes", "Ecuador", "ÍKHOR", "perfumería premium", "pre-orden", "fragancias"],
+  openGraph: {
+    title: "ÍKHOR — Perfumería Premium Ecuador",
+    description: "Perfumes originales importados con pre-orden automática. Envío a todo Ecuador.",
+    type: "website",
+    locale: "es_EC",
+    siteName: "ÍKHOR",
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "ÍKHOR — Perfumería Premium Ecuador",
+    description: "Perfumes originales importados con pre-orden automática.",
+  },
+  robots: {
+    index: true,
+    follow: true,
+  },
 };
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {

@@ -39,7 +39,7 @@
 
 import { useState, useEffect } from "react";
 import { motion } from "framer-motion";
-import type { Perfume } from "@/lib/types";
+import type { Perfume, ImportSettings, SavedAddress, PaymentMethod } from "@/lib/types";
 import { CreditCard, Loader2, Copy, Check, Truck, Lock } from "lucide-react";
 import { createClient } from "@/lib/supabaseClient";
 import PayPalButton from "./PayPalButton";
@@ -53,7 +53,7 @@ interface CheckoutProps {
   onComplete: () => void;
   totalCents: number;
   cartItems: Perfume[];
-  importSettings: any;
+  importSettings: ImportSettings | null;
 }
 
 export default function CheckoutForm({ onComplete, totalCents, cartItems, importSettings }: CheckoutProps) {
@@ -74,15 +74,15 @@ export default function CheckoutForm({ onComplete, totalCents, cartItems, import
   });
 
   // Método de pago seleccionado
-  const [paymentMethod, setPaymentMethod] = useState<'transferencia' | 'payphone' | 'paypal' | 'diferimiento' | 'takenos'>('transferencia');
+  const [paymentMethod, setPaymentMethod] = useState<PaymentMethod>('transferencia');
 
   // Direcciones guardadas
-  const [savedAddresses, setSavedAddresses] = useState<any[]>([]);
+  const [savedAddresses, setSavedAddresses] = useState<SavedAddress[]>([]);
   const [selectedAddressId, setSelectedAddressId] = useState<string>("");
   const [saveAddress, setSaveAddress] = useState(true);
 
   // Import settings local
-  const [localImportSettings, setLocalImportSettings] = useState<any>(null);
+  const [localImportSettings, setLocalImportSettings] = useState<ImportSettings | null>(null);
   
   const totalDollars = (totalCents / 100).toFixed(2);
   // ─────────────────────────────────────────────────────────
